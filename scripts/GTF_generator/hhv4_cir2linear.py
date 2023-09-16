@@ -1,53 +1,49 @@
 from Bio import SeqIO
 import sys
 
-from Bio import SeqIO
+cir_fasta=sys.argv[1]
+cir_gtf=sys.argv[2]
+split_point=sys.argv[3]
+prefix=sys.argv[4]
 
-def extract_circular_sequence(fasta_file):
-    # Read the FASTA file and assume only one sequence is present
-    record = SeqIO.read(fasta_file, "fasta")
-    return record.seq, record.id
+split_point=int(split_point)
 
-def convert_coordinates(start, end, sequence_length):
-    if start <= end:
-        return start, end
-    else:
-        return start, sequence_length, 0, end
+def split_circular_genome(fasta_path, gtf_path, split_position, output_prefix):
+    # Edit the FASTA file
+    with open(fasta_path, 'r') as f:
+        lines = f.readlines()
+        seq = ''.join([line.strip() for line in lines[1:]])
+        print("seq len : " + str(len(seq)))
+        
 
-def process_feature(feature, sequence_length):
-    start, end = convert_coordinates(feature.start, feature.end, sequence_length)
-    return (start, end, feature.strand)
+    # Adjust Annotations in GTF File
+    with open(gtf_path, 'r') as f:
+        lines = f.readlines()
 
-def main(circular_gtf, fasta_file, output_gtf, output_fasta):
-    # Step 1: Extract circular genome sequence
-    circular_sequence, record_id = extract_circular_sequence(fasta_file)
-    sequence_length = len(circular_sequence)
-
-    # Step 2: Process GTF file
-    with open(circular_gtf, "r") as in_file, open(output_gtf, "w") as out_file:
-        for line in in_file:
-            if line.startswith("#"):
-                out_file.write(line)
+        new_gtf_lines = []
+        for line in lines:
+            if line.startswith('#'):
+                new_gtf_lines.append(line)
                 continue
 
-            fields = line.strip().split("\t")
-            feature_start, feature_end, feature_strand = int(fields[3]), int(fields[4]), fields[6]
+            parts = line.strip().split('\t')
+            chrom, feature, start, end = parts[0], parts[2], int(parts[3]), int(parts[4])
 
-            # Adjust coordinates for features spanning the origin
-            new_start, new_end = convert_coordinates(feature_start, feature_end, sequence_length)
+            # Adjust coordinates if necessary
+            
+            if end < split_point:
+                start = start + len(seq)
+                end = end + len(seq)
+            
+            start = start - split_position
+            end = end - split_position
 
-            # Update the line and write to output GTF
-            fields[3], fields[4], fields[6] = str(new_start), str(new_end), feature_strand
-            out_file.write("\t".join(fields) + "\n")
 
-    # Step 3: Write modified circular genome sequence to new FASTA file
-    with open(output_fasta, "w") as out_fasta:
-        out_fasta.write(f">{record_id}\n{circular_sequence}\n")
+            new_gtf_lines.append(f'{chrom}\t{parts[1]}\t{feature}\t{start}\t{end}\t{parts[5]}\t{parts[6]}\t{parts[7]}\t{parts[8]}')
 
-if __name__ == "__main__":
-    circular_gtf = sys.argv[1]
-    fasta_file = sys.argv[2]
-    output_gtf = sys.argv[3]
-    output_fasta = sys.argv[4]
-    main(circular_gtf, fasta_file, output_gtf, output_fasta)
+    with open(f'{output_prefix}_adjusted.gtf', 'w') as f:
+        f.write('\n'.join(new_gtf_lines))
+
+split_circular_genome(cir_fasta , cir_gtf, split_point, prefix)
+
 
