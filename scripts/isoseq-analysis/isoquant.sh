@@ -1,18 +1,23 @@
 #!/bin/bash
 
-ref="/data/kimj75/00.Files/references/chm13v2/fa/chm13v2.0_maskedY_rCRS_wEBV.fa"
-geneDB=$3
-bam=$1
-prefix=$2
-geneDB=$3
+ref=$1
+geneDB=$2
+bam=$3
+output_prefix=$4
 
 echo -e "isoquant.py \
-        --reference ${ref} --genedb ${geneDB} --bam ${bam} \
-        --data_type pacbio_ccs -o ${prefix} \
-        --check_canonical --count_exons --threads $SLURM_CPUS_PER_TASK"
+        --reference ${ref} \
+        --genedb ${geneDB} \
+        --bam ${bam} \
+        --data_type pacbio_ccs \
+        -o ${output_prefix} \
+        --check_canonical --count_exons --threads $SLURM_CPUS_PER_TASK && touch isoquant.done\n"
 
 
 isoquant.py \
-	--reference ${ref} --genedb ${geneDB} --bam ${bam} \
-	--data_type pacbio_ccs -o ${prefix} \
-	--check_canonical --count_exons --threads $SLURM_CPUS_PER_TASK
+	--reference ${ref} \
+	--genedb ${geneDB} \
+	--bam ${bam} \
+	--data_type pacbio_ccs \
+	-o ${output_prefix} \
+	--check_canonical --count_exons --threads $SLURM_CPUS_PER_TASK && touch isoquant.done
