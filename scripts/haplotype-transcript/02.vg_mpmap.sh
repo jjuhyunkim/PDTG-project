@@ -46,7 +46,6 @@ vg index -p -t ${SLURM_CPUS_PER_TASK}\
 	--temp-dir /data/kimj75/tmp \
 	-g ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gcsa \
 	-f ${wd}/03.pantranscriptome/mapping \
-	--size-limit 4000 \
 	$(for chr in `cat ${wd}/seqList`; do echo ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg; done) && touch ${wd}/03.pantranscriptome/gcsaIndexing.done
 fi
 

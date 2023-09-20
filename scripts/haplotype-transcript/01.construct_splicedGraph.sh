@@ -24,7 +24,7 @@ do chr=`basename $seqFile .seqFile`
 done
 
 
-
+mkdir -p ${wd}/03.pantranscriptome
 # Converting graph from GBZ to pg and extract haplotype from GBZ file
 echo -e "${YELLOW}Step1: construct pantranscriptome graph genome by each Chromosome${RESET}\n"
 for chr in `cat ${wd}/seqList`

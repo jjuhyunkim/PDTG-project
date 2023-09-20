@@ -34,11 +34,11 @@ fi
 if [ ! -f squanti3.done ]; then
 conda activate SQANTI3.env
 echo -e "sh ~/code/_submit_norm.sh 50 60G squanti3_${prefix} ${pipeline}/sqanti3.${refName}.sh \
-        "${ref} ${gtf} ${output_prefix}.isoquant/OUT/OUT.transcript_models.gtf . ${prefix}_squanti3" \
+        "${ref} ${gtf} ${output_prefix}.isoquant/OUT/OUT.transcript_models.gtf . ${output_prefix}_squanti3" \
         --dependency=afterok:`sed '2!d' step2.isoquant.sbatch` > step3.isoquant.sbatch"
 
 sh ~/code/_submit_norm.sh 50 60G squanti3_${prefix} ${pipeline}/sqanti3.${refName}.sh \
-	"${ref} ${gtf} ${output_prefix}.isoquant/OUT/OUT.transcript_models.gtf . ${prefix}_squanti3" \
+	"${ref} ${gtf} ${output_prefix}/OUT/OUT.transcript_models.gtf . ${output_prefix}_squanti3" \
 	--dependency=afterok:`sed '2!d' step2.isoquant.sbatch` > step3.isoquant.sbatch
 conda deactivate
 fi
