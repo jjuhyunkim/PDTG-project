@@ -26,26 +26,27 @@ for chr in `cat ${wd}/seqList`
 do
 	if [ ! -f ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.done ];then
 	echo -e "${CYAN}CMD :vg prune -p -t ${SLURM_CPUS_PER_TASK} \ \n \
-                -u -a -m ${wd}/03.pantranscriptome/mapping \ \n \
-                ${wd}/03.pantranscriptome/${chr}.spliced_graph.pg \ \n \
+                -r \ # embedding the reference transcrtips as reference paths  \ \n \
+		${wd}/03.pantranscriptome/${chr}.spliced_graph.pg \ \n \
                 > ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg${RESET}\n"
 	vg prune -p -t ${SLURM_CPUS_PER_TASK} \
-		-u -a -m ${wd}/03.pantranscriptome/mapping \
+		-r \ # embedding the reference transcrtips as reference paths
 	       	${wd}/03.pantranscriptome/${chr}.spliced_graph.pg \
 		> ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg && touch ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.done
 	fi
 done
 
 mkdir -p /data/kimj75/tmp
-echo -e "${CYAN}CMD :vg index -p -t ${SLURM_CPUS_PER_TASK} \ \n \
+echo -e "${CYAN}CMD :vg index -p -t ${SLURM_CPUS_PER_TASK} \ \n \ 
+	--temp-dir /data/kimj75/tmp \ \n \
+        -Z 4500 \ \n \
         -g ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gcsa \ \n \
-        -f ${wd}/03.pantranscriptome/mapping \ \n \
-        $(for chr in `cat ${wd}/seqList`; do echo ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg; done) && \ \n \
-	touch ${wd}/03.pantranscriptome/gcsaIndexing.done${RESET}\n"
+        $(for chr in `cat ${wd}/seqList`; do echo ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg; done) && touch ${wd}/03.pantranscriptome/gcsaIndexing.done${RESET}"
+
 vg index -p -t ${SLURM_CPUS_PER_TASK}\
 	--temp-dir /data/kimj75/tmp \
+	-Z 4500 \
 	-g ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gcsa \
-	-f ${wd}/03.pantranscriptome/mapping \
 	$(for chr in `cat ${wd}/seqList`; do echo ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg; done) && touch ${wd}/03.pantranscriptome/gcsaIndexing.done
 fi
 
