@@ -7,7 +7,7 @@ seqFile=$4
 refSample=$5
 rnaSeqFastq=$6
 
-pipeline="/data/Phillippy/projects/HG002_Masseq/github/scripts/haplotype-transcript"
+pipeline="/data/Phillippy/projects/HG002_Masseq/PDTG-project/scripts/haplotype-transcript"
 RED='\e[31m'
 GREEN='\e[32m'
 RESET='\e[0m'
