@@ -26,12 +26,12 @@ for chr in `cat ${wd}/seqList`
 do
 	if [ ! -f ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.done ];then
 	echo -e "${CYAN}CMD :vg prune -p -t ${SLURM_CPUS_PER_TASK} \ \n \
-                -r \ # embedding the reference transcrtips as reference paths  \ \n \
-		${wd}/03.pantranscriptome/${chr}.spliced_graph.pg \ \n \
-                > ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg${RESET}\n"
+		-r \ 
+                ${wd}/03.pantranscriptome/${chr}.spliced_graph.pg \
+                > ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg && touch ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.done ${RESET}" 
+	
 	vg prune -p -t ${SLURM_CPUS_PER_TASK} \
-		-r \ # embedding the reference transcrtips as reference paths
-	       	${wd}/03.pantranscriptome/${chr}.spliced_graph.pg \
+		-r ${wd}/03.pantranscriptome/${chr}.spliced_graph.pg \
 		> ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.vg && touch ${wd}/03.pantranscriptome/${chr}.spliced_graph_pruned.done
 	fi
 done
@@ -65,13 +65,13 @@ if [ ! -f ${wd}/04.multimapping/mpmap.done ]; then
                 -n rna -l long \ \n \
                 -x ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg \ \n \
                 -g ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gcsa \ \n \
-                -d -j ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \ \n \
+                -d ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \ \n \
                 -f ${isoseq} > ${wd}/04.multimapping/${prefix}.aligned.gamp && touch ${wd}/04.multimapping/mpmap.done${RESET}\n"
 	vg mpmap -t ${SLURM_CPUS_PER_TASK} \
 		-n rna -l long \
 		-x ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg \
 		-g ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gcsa \
-		-d -j ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \
+		-d ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \
 		-f ${isoseq} > ${wd}/04.multimapping/${prefix}.aligned.gamp && touch ${wd}/04.multimapping/mpmap.done
 fi
 

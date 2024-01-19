@@ -3,7 +3,7 @@
 refFasta=$1
 refGTF=$2
 longReadGTF=$3
-outDir=$4
+wd=$4
 outPrefix=$5
 
 
@@ -11,12 +11,13 @@ source /data/kimj75/anaconda3/bin/activate
 
 conda activate SQANTI3.env
 
+outDir=`realpath $wd`
 
 filterMode='rules'
 
 cDNA_cupcakeFolder="/data/kimj75/program/cDNA_Cupcake"
-tss="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tss.chm13.bed"
-tes="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tes.chm13.bed"
+#tss="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tss.chm13.bed"
+#tes="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tes.chm13.bed"
 polya="/data/kimj75/00.Files/squanti3/human_polyA_motif.txt"
 
 
@@ -33,12 +34,12 @@ awk '$7 == "+" || $7 == "-" {print $0}' ${longReadGTF} | awk '$3 != "gene" {prin
 if [ ! -f  ${outDir}/sqanti3.qc.done ]; then
 echo -e "python ${sqantiDir}/sqanti3_qc.py ${outDir}/longReadGTF.gtf ${refGTF} ${refFasta} \
         -o ${outPrefix} -d ${outDir} \
-	--CAGE_peak ${tss} --polyA_motif_list ${polya} --polyA_peak ${tes} \
+	--polyA_motif_list ${polya} \
         --cpus ${SLURM_CPUS_PER_TASK} --isoAnnotLite && touch ${outDir}/sqanti3.qc.done\n"
 
 python ${sqantiDir}/sqanti3_qc.py ${outDir}/longReadGTF.gtf  ${refGTF} ${refFasta} \
 	-o ${outPrefix} -d ${outDir} \
-	--CAGE_peak ${tss} --polyA_motif_list ${polya} --polyA_peak ${tes} \
+	--polyA_motif_list ${polya} \
 	--cpus ${SLURM_CPUS_PER_TASK} --isoAnnotLite && touch ${outDir}/sqanti3.qc.done
 fi
 

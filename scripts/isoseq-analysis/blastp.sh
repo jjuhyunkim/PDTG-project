@@ -5,11 +5,12 @@ module load blast
 dbloc='/fdb/blastdb/'
 query=$1
 dbName=$2
+prefix=$3
 
 blastp \
 -query ${query} \
 -db ${dbloc}/${dbName} \
--out ${dbName}.pblast.txt \
+-out ${prefix}_${dbName}.pblast.txt \
 -outfmt 6 \
 -evalue 1e-5 \
 -max_target_seqs 1 \
