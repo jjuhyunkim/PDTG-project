@@ -15,10 +15,11 @@ outDir=`realpath $wd`
 
 filterMode='rules'
 
+sqanti3_bed_dir='/data/Phillippy/projects/HG002_Masseq/PDTG-project/scripts/isoseq-analysis/sqanti3_bed'
 cDNA_cupcakeFolder="/data/kimj75/program/cDNA_Cupcake"
-#tss="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tss.chm13.bed"
-#tes="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tes.chm13.bed"
-polya="/data/kimj75/00.Files/squanti3/human_polyA_motif.txt"
+tss=$sqanti3_bed_dir'/rnawg_cerberus_tes.hg002.dip.bed'
+tes=$sqanti3_bed_dir'/rnawg_cerberus_tes.hg002.dip.bed'
+polya=$sqanti3_bed_dir"/human_polyA_motif.txt"
 
 
 ## dependencies ## 
