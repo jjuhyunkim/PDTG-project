@@ -22,11 +22,13 @@ else
         exit
 fi
 
-${rpvg} -t $SLURM_CPUS_PER_TASK \
-	--graph ${wd}/03.pantranscriptome/${graph_prefix}.pantranscriptome.xg \
-	--paths ${wd}/03.pantranscriptome/${graph_prefix}.pantranscriptome.gbwt \
+CMD="${rpvg} -t $SLURM_CPUS_PER_TASK \
+	--graph ${wd}/03.pantranscriptome/${graph_prefix}.spliced.xg \
+	--paths ${wd}/03.pantranscriptome/${graph_prefix}.haplotx.gbwt \
 	--alignments ${wd}/04.multimapping/${sample_prefix}.aligned.gamp \
-	--output-graph_prefix ${wd}/05.quantification/${sammple_prefix}.rpvg \
-	--path-info ${wd}/03.pantranscriptome/${graph_prefix}.pantranscriptome.txt \
+	--output-prefix ${wd}/05.quantification/${sammple_prefix}.rpvg \
+	--path-info ${wd}/03.pantranscriptome/${graph_prefix}.txorigin.txt \
 	$extra \
-	--inference-model haplotype-transcripts && touch ${wd}/05.quantification/${sammple_prefix}_rpvg.done
+	--inference-model haplotype-transcripts && touch ${wd}/05.quantification/${sammple_prefix}_rpvg.done"
+echo $CMD
+eval $CMD

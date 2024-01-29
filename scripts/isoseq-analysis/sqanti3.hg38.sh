@@ -9,10 +9,12 @@ refName=$6
 
 filterMode='rules'
 
+sqanti_bed_dir="/data/Phillippy/projects/HG002_Masseq/PDTG-project/scripts/isoseq-analysis/sqanti3_bed"
+
 cDNA_cupcakeFolder="/data/kimj75/program/cDNA_Cupcake"
-tss="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tss."${refName}".bed"
-tes="/data/kimj75/00.Files/squanti3/rnawg_cerberus_tes."${refName}".bed"
-polya="/data/kimj75/00.Files/squanti3/human_polyA_motif.txt"
+tss=$sqanti_bed_dir"/rnawg_cerberus_tss."${refName}".bed"
+tes=$sqanti_bed_dir"/rnawg_cerberus_tes."${refName}".bed"
+polya=$sqanti_bed_dir"/squanti3/human_polyA_motif.txt"
 
 
 ## dependencies ## 
