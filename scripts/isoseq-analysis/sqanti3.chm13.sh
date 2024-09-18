@@ -1,5 +1,3 @@
-#! /bin/bash
-
 refFasta=$1
 refGTF=$2
 longReadGTF=$3
