@@ -9,7 +9,8 @@
 5. Quantify haplotype specific expression using `rpvg`
 
 ### Data
-* All codes used this project in this github repo(` Mainscript.sh `)
+* All codes used this project in this github repo(`scripts
+/haplotype-transcript/Mainscript.sh`)
 * The reference genome : CHM13v2.0 + chrM + chrEBV (linear)
 * Human genome : HG002 diploid genome v101
 * Gene annotation : CHM13 gene annotation / (+-novel isoforms discovered by using long read sequencing data)
