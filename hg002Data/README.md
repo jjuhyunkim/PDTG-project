@@ -36,9 +36,11 @@ To visualize the data, we generated a `GFA` file containing all chromosomes prod
     ```
     * 1st hypothesis : problem during estimate distance between paired end reads?
       * [fragment size estimation during vg mpmap and rpvg](https://www.biostars.org/p/9603638/)
-    * 2nd hypothesis : too complex region
-      * What i am going to try
-        * Split chromosome or region to find the complex region
+    * 2nd hypothesis : too complex region with nested variant?
+      ![graph](hg002.complex.graph.png)
+       1. Is there any method that could make the tangle simper but without lossing variant infomation? 
+          1. Using minigraph-cactus vcf?
+          2. Split chromosome or region to find the complex region
           * [issue : split gamp by chromosome or extract specific regions.](https://www.biostars.org/p/9605059/)
 
 2. Multimapping was successfully performed when I used hifi long read single end RNA seq data, but when I tired to run `rpvg`, I encountered an error stating:
