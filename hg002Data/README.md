@@ -2,11 +2,11 @@
 
 
 ### methods
-1. Build high quality human diploid genome by [HG002 Q100 project](https://github.com/marbl/HG002) (lead by [Nancy F. Hansen][(](https://github.com/nhansen)))
-2. Generate diploid graph based on CHM13 using `minigraph-cactus`
-3. Project transcriptome information on the graph to make pan-transcriptome graph using `vg` tools(`vg rna`)
-4. Align the sequencing data on the transcriptome graph using `vg mpmap`
-5. Quantify haplotype specific expression using `rpvg`
+1. Build a high-quality human diploid genome through the  [HG002 Q100 project](https://github.com/marbl/HG002) (led by [Nancy F. Hansen](https://github.com/nhansen)
+2. Generate a diploid graph based on CHM13 using  `minigraph-cactus`
+3. Project transcriptome information onto the graph to create a pan-transcriptome graph using `vg` tools(`vg rna`)
+4. Align sequencing data to the transcriptome graph using `vg mpmap`
+5. Quantify haplotype-specific expression using `rpvg`
 
 ### Data
 * All codes used this project in this github repo(`scripts/haplotype-transcript/Mainscript.sh`)
