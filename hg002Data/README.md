@@ -19,12 +19,21 @@
 To visualize the data, we generated a `GFA` file containing all chromosomes produced by `minigraph-cactus` without sequences to reduce the file size. : `hg002v101.allGene.isoquantModel.all_chr.sv.gfa.gz`
 
 ### Troubleshooting
-1. multimapping was done with successfully when i used short read paired end RNA seq data, but when I've tried to run `rpvg`, I encountered error stating: 
+1. Multimapping was successfully performed when I used short-read paired-end RNA-seq data, but when I tried to run rpvg, I encountered an error stating:
    * [github issue](https://github.com/jonassibbesen/rpvg/issues/63)
     ```bash
     rpvg: /home/rpvg/src/path_abundance_estimator.cpp:715: void NestedPathAbundanceEstimator::inferPathSubsetAbundance(PathClusterEstimates*, const std::vector<ReadPathProbabilities>&, std::mt19937*, const spp::sparse_hash_map<std::vector<unsigned int>, double>&) const: Assertion `path_group.second.size() <= group_size' failed.
     ```
-
+    cmd line I used : 
+    ```bash
+    rpvg -t 50 \
+    --graph hg002v101.allGene.isoquantModel.pantranscriptome.xg \
+    --paths hg002v101.allGene.isoquantModel.pantranscriptome.gbwt \
+    --alignments hg002v101.allGene.isoquantModel.aligned.gamp \
+    --output-prefix hg002v101.allGene.isoquantModel.rpvg \
+    --path-info hg002v101.allGene.isoquantModel.pantranscriptome.txt \
+    --inference-model haplotype-transcripts
+    ```
     * 1st hypothesis : problem during estimate distance between paired end reads?
       * [fragment size estimation during vg mpmap and rpvg](https://www.biostars.org/p/9603638/)
     * 2nd hypothesis : too complex region
@@ -32,5 +41,19 @@ To visualize the data, we generated a `GFA` file containing all chromosomes prod
         * Split chromosome or region to find the complex region
           * [issue : split gamp by chromosome or extract specific regions.](https://www.biostars.org/p/9605059/)
 
-2. Question about result
+2. Multimapping was successfully performed when I used hifi long read single end RNA seq data, but when I tired to run `rpvg`, I encountered an error stating:
+   ```bash
+   rpvg: /home/rpvg/src/alignment_path_finder.cpp:472: std::vector<AlignmentSearchPath> AlignmentPathFinder<AlignmentType>::extendAlignmentSearchPath(const AlignmentSearchPath&, const vg::MultipathAlignment&) const [with AlignmentType = vg::MultipathAlignment]: Assertion `best_align_score <= optimal_score' failed.
+    ```
+    cmd line I used :
+    ```bash
+    rpvg -t 50 \
+    --graph hg002v110_nonGene_ExtendAllGenes.pantranscriptome.xg \
+    --paths hg002v110_nonGene_ExtendAllGenes.pantranscriptome.gbwt \
+    --alignments hg002v110_nonGene_ExtendAllGenes.HG002_na24385_hifi.aligned.gamp \
+    --output-prefix ./hifi \
+    -f hg002v110_nonGene_ExtendAllGenes.pantranscriptome.txt \
+    --inference-model haplotype-transcripts -s -l
+    ```
+3. Question about result
    * [HST assignment : rpvg assigned two different homo HST instead of expected heterozygous transcripts. #59e](https://github.com/jonassibbesen/rpvg/issues/59)
