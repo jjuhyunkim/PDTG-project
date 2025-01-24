@@ -22,22 +22,15 @@ else
 fi
 
 
-echo -e "${CYAN}CMD:${rpvg} --graph ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg \
-        --paths ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gbwt \
-        --alignments ${wd}/04.multimapping/${prefix}.aligned.gamp \
-        --output-prefix ${wd}/05.quantification/${prefix}.rpvg \
-        --path-info ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.txt \
-        --single-end --long-reads \
-        --inference-model haplotype-transcripts && touch ${wd}/05.quantification/rpvg.done${RESET}\n"
-
-
 mkdir -p 05.quantification
 
-${rpvg} -t $SLURM_CPUS_PER_TASK \
+cmd="${rpvg} -t $SLURM_CPUS_PER_TASK \
 	--graph ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg \
 	--paths ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gbwt \
 	--alignments ${wd}/04.multimapping/${prefix}.aligned.gamp \
 	--output-prefix ${wd}/05.quantification/${prefix}.rpvg \
 	--path-info ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.txt \
 	$extra \
-	--inference-model haplotype-transcripts && touch ${wd}/05.quantification/rpvg.done
+	--inference-model haplotype-transcripts && touch ${wd}/05.quantification/rpvg.done"
+echo $cmd
+eval $cmd

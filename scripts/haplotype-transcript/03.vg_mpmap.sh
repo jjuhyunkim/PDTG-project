@@ -5,10 +5,11 @@ module load samtools
 
 prefix=$1
 wd=$2
-refSample=$3
+prefix_output=$3
 mpmapMode=$4
-rnaSeqFastq1=$5
-rnaSeqFastq2=$6
+threads=$5
+rnaSeqFastq1=$6
+rnaSeqFastq2=$7
 
 
 if [ $mpmapMode == "paired" ]; then
@@ -30,28 +31,23 @@ CYAN='\e[36m'
 echo -e "${RED} vg version : \n`vg version`"
 
 if [ ! -f ${wd}/03.pantranscriptome/distindexing.done ]; then
-	echo -e "${CYAN}CMD :vg index -j ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \ \n \
-		${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg && \ \n \
-		touch ${wd}/03.pantranscriptome/distindexing.done${RESET}\n"
-	vg index -j ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \
+	cmd="vg index -j ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \
 		${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg && \
-		touch ${wd}/03.pantranscriptome/distindexing.done
+		touch ${wd}/03.pantranscriptome/distindexing.done"
+	echo $cmd
+	eval $cmd
 fi
 
 mkdir -p 04.multimapping
 if [ ! -f ${wd}/04.multimapping/mpmap.done ]; then
-	echo -e "${CYAN}CMD :vg mpmap -t ${SLURM_CPUS_PER_TASK} \ \n \
-                -n rna -l long \ \n \
-                -x ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg \ \n \
-                -g ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gcsa \ \n \
-                -d ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \ \n \
-                -f ${isoseq} > ${wd}/04.multimapping/${prefix}.aligned.gamp && touch ${wd}/04.multimapping/mpmap.done${RESET}\n"
-	vg mpmap -t ${SLURM_CPUS_PER_TASK} \
+	cmd="vg mpmap -t ${threads} \
 		-n rna $extra \
 		-x ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.xg \
 		-g ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.gcsa \
 		-d ${wd}/03.pantranscriptome/${prefix}.pantranscriptome.dist \
-		> ${wd}/04.multimapping/${prefix}.aligned.gamp && touch ${wd}/04.multimapping/mpmap.done
+		> ${wd}/04.multimapping/${prefix}.$prefix_output.aligned.gamp && touch ${wd}/04.multimapping/${prefix}.$prefix_output.mpmap.done"
+	echo -e "${CYAN}CMD: $cmd ${RESET}\n"
+	eval $cmd
 fi
 
 #if [ ! -f ${wd}/04.multimapping/gamp2bam.done ]; then

@@ -10,7 +10,7 @@ mpmapMode=$4
 rnaSeqFastq1=$5
 rnaSeqFastq2=$6
 
-threads=100
+threads=600
 
 if [ $mpmapMode == "paired" ]; then
 	extra="-f $rnaSeqFastq1 -f $rnaSeqFastq2"

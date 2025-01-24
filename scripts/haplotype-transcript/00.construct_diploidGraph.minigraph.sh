@@ -35,9 +35,17 @@ do
 done
 fi
 
-if [ $(ls ${wd}/01.fastaFiles/*.seqFile.done | wc -l) = $(wc -l ${seqFile} ) ]; then
-	touch ${wd}/seqFile.generator.done
+# Count the number of .seqFile.done files
+done_count=$(ls "${wd}/01.fastaFiles/"*.seqFile.done 2>/dev/null | wc -l)
+
+# Count the number of lines in seqFile
+line_count=$(wc -l < "${seqFile}")
+
+# Compare counts and create done file if they match
+if [ "$done_count" -eq "$line_count" ]; then
+    touch "${wd}/seqFile.generator.done"
 fi
+
 
 # graph construction
 mkdir -p 02.minigraph-cactus
@@ -46,13 +54,11 @@ if [ -f ${wd}/seqFile.generator.done ] ; then
 for i in `ls ./01.fastaFiles/*.seqFile`
 do chr=`basename $i .seqFile`
 	[ -d "${wd}/02.minigraph-cactus/js_${chr}" ] && rm -rf "${wd}/02.minigraph-cactus/js_${chr}" 
-	echo -e "cactus-pangenome ${wd}/02.minigraph-cactus/js_${chr} ${wd}/01.fastaFiles/${chr}.seqFile \ \n \
-                --outDir ${wd}/02.minigraph-cactus --outName ${prefix}.${chr} \ \n \
-                --reference ${refSample} \ \n \
-                --odgi --draw --viz --vcf --giraffe --gfa --gbz --chrom-vg && touch ${wd}/02.minigraph-cactus/construct_diploidGraph.done\n"
-	cactus-pangenome ${wd}/02.minigraph-cactus/js_${chr} ${wd}/01.fastaFiles/${chr}.seqFile \
+	cmd="cactus-pangenome ${wd}/02.minigraph-cactus/js_${chr} ${wd}/01.fastaFiles/${chr}.seqFile \
 		--outDir ${wd}/02.minigraph-cactus --outName ${prefix}.${chr} \
 		--reference ${refSample} \
-		--odgi --draw --viz --vcf --giraffe --gfa --gbz && touch ${wd}/02.minigraph-cactus/construct_diploidGraph.done
+		--odgi --draw --viz --vcf --giraffe --gfa --gbz && touch ${wd}/02.minigraph-cactus/construct_diploidGraph.done"
+	echo $cmd
+	eval $cmd
 done
 fi

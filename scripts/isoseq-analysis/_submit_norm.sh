@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 if [[ "$#" -lt 4 ]]; then
   echo "Usage: sh submit_norm.sh CPU_PER_TASK MEM(g) JOB_NAME SCRIPT [args] [extra]"

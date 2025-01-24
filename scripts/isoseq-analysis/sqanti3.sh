@@ -23,6 +23,9 @@ export PYTHONPATH=$PYTHONPATH:${cDNA_cupcakeFolder}/sequence/
 export PYTHONPATH=$PYTHONPATH:${cDNA_cupcakeFolder}/rarefraction/
 
 
+awk '$7 == "+" || $7 == "-" {print $0}' ${longReadGTF} | awk '$3 == "transcript" || $3 == "exon" { print $0}' > ${outDir}/longReadGTF.gtf
+awk '$7 == "+" || $7 == "-" {print $0}' ${refGTF} | awk '$3 == "transcript" || $3 == "exon" { print $0}' > ${outDir}/refGTF.gtf
+
 # 01 . QC
 if [ ! -f  ${outDir}/sqanti3.qc.done ]; then
 echo -e "python ${sqantiDir}/sqanti3_qc.py ${outDir}/longReadGTF.gtf ${outDir}/refGTF.gtf ${refFasta} \

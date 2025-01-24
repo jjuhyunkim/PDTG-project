@@ -8,7 +8,6 @@ graph_prefix=$4
 sample_prefix=$5
 mainDir=`realpath $6`
 
-mambaEnv="diploid_transcriptome"
 
 if [[ "$#" -eq 7 ]]; then
     mpmapMode="single"
@@ -20,16 +19,28 @@ elif [[ "$#" -eq 8 ]]; then
 else
     exit
 fi
+
+echo -e "ref : $ref"
+echo -e "vcf : $vcf"
+echo -e "gtf : $gtf"
+echo -e "graph_prefix : $graph_prefix"
+echo -e "sample_prefix : $sample_prefix"
+echo -e "mainDir : $mainDir"
+echo -e "RNA read(s) : $rnaSeqFastq1 $rnaSeqFastq2"
+mambaEnv="diploid_transcriptome"
+
+source /data/kimj75/miniforge3/bin/activate $mambaEnv
 PIPELINE="/data/Phillippy/projects/HG002_Masseq/PDTG-project/scripts/haplotype-transcript"
 schedular="/data/Phillippy/projects/HG002_Masseq/PDTG-project/scripts/schedular"
 
 
 # RUN
-mkdir -p $mainDir/03.pantranscriptome 
+threads=80
+mkdir -p $mainDir/03.pantranscriptome
 if [ ! -f $mainDir/03.pantranscriptome/autoindex.done ]; then
 	if [ ! -f ${mainDir}/step1.autoindex.sbatch ]; then
-		CMD1="sh ${schedular}/_submit_norm.sh 50 100G ${graph_prefix}_autoindex ${PIPELINE}/07.autoindex.usingVCF.sh \
-			\"$ref $vcf $gtf $graph_prefix $mainDir\" \
+		CMD1="sh ${schedular}/_submit_largemem.sh $threads 1200G ${graph_prefix}_autoindex ${PIPELINE}/07.autoindex.usingVCF.sh \
+			\"$ref $vcf $gtf $graph_prefix $mainDir $threads\" \
 	       		> ${mainDir}/step1.autoindex.sbatch"
 		eval $CMD1
 		echo $CMD1
@@ -62,3 +73,4 @@ if [ ! -f "${mainDir}/05.quantification/${sample_prefix}_rpvg.done" ]; then
 	echo $CMD3
 fi
 
+conda deactivate
